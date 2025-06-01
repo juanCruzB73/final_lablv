@@ -1,0 +1,6 @@
+{
+  "calle": "Avenida Siempre Viva",
+  "numero": "742",
+  "localidad_id": 1,
+  "activo": true
+}

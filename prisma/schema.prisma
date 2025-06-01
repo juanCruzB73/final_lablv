@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Categoria {
+  categoria_id       BigInt    @id @default(autoincrement())
+  nombre   String?   @db.VarChar(255)
+  activo   Boolean?
+  productos Producto[]
+}
+
+model Descuento {
+  descuento_id     BigInt   @id @default(autoincrement())
+  valor  String?  @db.VarChar(255)
+  activo Boolean?
+  productos    Producto[]
+}
+
+model Producto {
+  producto_id               BigInt         @id @default(autoincrement())
+  nombre           String?        @db.VarChar(255)
+  descripcion      String?        @db.Text
+  precio           Float?
+  categoria_id     BigInt?
+  descuento_id     BigInt?
+  activo           Boolean?
+  categoria        Categoria?     @relation(fields: [categoria_id], references: [categoria_id])
+  descuento        Descuento?     @relation(fields: [descuento_id], references: [descuento_id])
+  imagenes         Imagen[]
+  productosAlergenos ProductoAlergeno[]
+  stockProductos   StockProducto[]
+}
+
+model Imagen {
+  id          BigInt    @id @default(autoincrement())
+  url         String?   @db.VarChar(255)
+  producto_id BigInt?
+  activo      Boolean?
+  producto    Producto? @relation(fields: [producto_id], references: [producto_id])
+}
+
+model Sucursal {
+  sucursal_id            BigInt   @id @default(autoincrement())
+  nombre        String?  @db.VarChar(255)
+  direccion_id  BigInt?
+  activo        Boolean?
+  direccion     Direccion? @relation(fields: [direccion_id], references: [direccion_id])
+  stockProductos StockProducto[]
+}
+
+model Provincia {
+  provincia_id       BigInt   @id @default(autoincrement())
+  nombre   String?  @db.VarChar(255)
+  activo   Boolean?
+  localidades Localidad[]
+}
+
+model Localidad {
+  localidad_id           BigInt   @id @default(autoincrement())
+  nombre       String?  @db.VarChar(255)
+  provincia_id BigInt?
+  activo       Boolean?
+  provincia    Provincia? @relation(fields: [provincia_id], references: [provincia_id])
+  direcciones  Direccion[]
+}
+
+model Direccion {
+  direccion_id           BigInt     @id @default(autoincrement())
+  calle        String?    @db.VarChar(255)
+  numero       String?    @db.VarChar(255)
+  localidad_id BigInt?
+  activo       Boolean?
+  localidad    Localidad? @relation(fields: [localidad_id], references: [localidad_id])
+  sucursales   Sucursal[]
+}
+
+model Usuario {
+  id         BigInt   @id @default(autoincrement())
+  email      String?  @unique @db.VarChar(255)
+  password   String?  @db.VarChar(255)
+  rol        String?  @db.VarChar(255)
+  activo     Boolean?
+}
+
+model StockProducto {
+  id           BigInt     @id @default(autoincrement())
+  producto_id  BigInt?
+  sucursal_id  BigInt?
+  stock        Int?
+  activo       Boolean?
+  producto     Producto?  @relation(fields: [producto_id], references: [producto_id])
+  sucursal     Sucursal?  @relation(fields: [sucursal_id], references: [sucursal_id])
+}
