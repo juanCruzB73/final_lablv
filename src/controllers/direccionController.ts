@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { serializeBigInts } from "../utils/serializeBigInts.ts";
-import { Direccion } from "../models/models.ts";
+import { serializeBigInts } from "../utils/serializeBigInts";
+import { Direccion } from "../models/models";
 
 export const getDirecciones = async (req: Request, res: Response): Promise<void> => {
   try {

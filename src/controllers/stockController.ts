@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { StockProducto } from "../models/models.ts";
-import { serializeBigInts } from "../utils/serializeBigInts.ts";
+import { StockProducto } from "../models/models";
+import { serializeBigInts } from "../utils/serializeBigInts";
 
 
 

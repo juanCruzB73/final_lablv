@@ -1,16 +1,13 @@
 import { Request, Response } from "express";
-import { User } from "../models/models.ts";
+import { User } from "../models/models";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { serializeBigInts } from "../utils/serializeBigInts";
 
 export const getUsers=async(req:Request,res:Response)=>{
     try{
         const users=await User.findMany();
-        const usersSanitized = users.map(({ id, ...rest }) => ({
-            id: id.toString(), // BigInt a string
-            ...rest,
-        }));
-         res.status(200).json({ok:true,users:usersSanitized});
+         res.status(200).json({ok:true,users:serializeBigInts(users)});
     }catch(err){
         console.log(err)
          res.status(500).json({message:"error loading users"})
@@ -23,9 +20,8 @@ export const getUsersById=async(req:Request,res:Response)=>{
         if (!userId) {
              res.status(400).json({ message: "user not found" });
         }
-        const user=await User.findFirst({where:{id:Number(userId)}});
-        const userSanitized = {...user,id:user?.id.toString()}
-        res.status(200).json({ok:true,user:userSanitized});
+        const user=await User.findFirst({where:{usuario_id:Number(userId)}});
+        res.status(200).json({ok:true,user:serializeBigInts(user)});
     }catch(err){
         console.log(err)
          res.status(500).json({message:"error loading user"})
@@ -53,11 +49,7 @@ export const registerUser=async(req:Request,res:Response)=>{
             },
         });
         const { password: _, ...userWithoutPassword } = newUser;
-        const safeUser = {
-            ...userWithoutPassword,
-            id: newUser.id.toString(),
-        };
-        res.status(201).json({ ok: true, user: safeUser });
+        res.status(201).json({ ok: true, user: serializeBigInts(newUser) });
     }catch(err){
         console.log(err)
          res.status(500).json({message:"error loading users"})
@@ -86,11 +78,8 @@ export const updateUser=async(req:Request,res:Response)=>{
                 activo:activo
             },
         })
-        const safeUser = {
-            ...user,
-            id: user.id.toString(),
-        };
-        res.status(201).json({ ok: true, user: safeUser });
+        
+        res.status(201).json({ ok: true, user: serializeBigInts(user) });
     }catch(err){
         console.log(err)
          res.status(500).json({message:"error updating users"})
@@ -105,7 +94,7 @@ export const delUser = async (req: Request, res: Response): Promise<void> => {
        return;
     }
 
-    const existingUser = await User.findUnique({ where: { id: Number(userId) } });
+    const existingUser = await User.findUnique({ where: { usuario_id: Number(userId) } });
 
     if (!existingUser) {
         res.status(404).json({ message: "user not found" });
@@ -113,7 +102,7 @@ export const delUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     await User.delete({
-      where: { id: Number(userId) },
+      where: { usuario_id: Number(userId) },
     });
 
     res.status(200).json({ ok: true, msg: "user deleted" });
@@ -152,7 +141,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const payload = { id: existingUser.id.toString(), email: existingUser.email };
+        const payload = { id: existingUser.usuario_id.toString(), email: existingUser.email };
         if (!process.env.JWT_SECRET) {
             throw new Error("JWT_SECRET not defined in environment");
         }
@@ -160,12 +149,9 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
         const token = jwt.sign(payload, secret, { expiresIn: "1h" });
 
         const { password: _, ...userData } = existingUser;
-        const safeUserData = {
-            ...userData,
-            id: existingUser.id.toString(), 
-        };
+        
 
-        res.status(200).json({ token, user: safeUserData });
+        res.status(200).json({ token, user: serializeBigInts(existingUser) });
         return;
     } catch (err) {
         console.error(err);

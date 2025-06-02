@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Producto } from "../models/models.js";
-import { serializeBigInts } from "../utils/serializeBigInts.ts";
+import { Producto } from "../models/models";
+import { serializeBigInts } from "../utils/serializeBigInts";
 
 export const getProductos = async (_req: Request, res: Response): Promise<void> => {
   try {
@@ -9,7 +9,6 @@ export const getProductos = async (_req: Request, res: Response): Promise<void> 
         categoria: true,
         descuento: true,
         imagenes: true,
-        productosAlergenos: true,
         stockProductos: true
       }
     });
@@ -31,7 +30,6 @@ export const getProductoById = async (req: Request, res: Response): Promise<void
         categoria: true,
         descuento: true,
         imagenes: true,
-        productosAlergenos: true,
         stockProductos: true
       }
     });

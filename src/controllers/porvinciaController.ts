@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Provincia } from "../models/models.ts";
-import { serializeBigInts } from "../utils/serializeBigInts.ts";
+import { Provincia } from "../models/models";
+import { serializeBigInts } from "../utils/serializeBigInts";
 
 export const getProvincias = async (_req: Request, res: Response): Promise<void> => {
   try {
@@ -47,7 +47,7 @@ export const createProvincia = async (req: Request, res: Response): Promise<void
   try {
     const { nombre, pais_id, activo } = req.body;
     const nuevaProvincia = await Provincia.create({
-      data: { nombre, pais_id, activo },
+      data: { nombre, activo },
     });
 
     res.status(201).json({
@@ -78,7 +78,7 @@ export const updateProvincia = async (req: Request, res: Response): Promise<void
 
     const provinciaActualizada = await Provincia.update({
       where: { provincia_id: BigInt(provinciaId) },
-      data: { nombre, pais_id, activo },
+      data: { nombre, activo },
     });
 
     res.status(200).json({

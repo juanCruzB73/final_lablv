@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Sucursal } from "../models/models.ts";
-import { serializeBigInts } from "../utils/serializeBigInts.ts";
+import { Sucursal } from "../models/models";
+import { serializeBigInts } from "../utils/serializeBigInts";
 
 export const getSucursales = async (req: Request, res: Response): Promise<void> => {
   try {

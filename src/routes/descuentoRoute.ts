@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createDescuento, deleteDescuento, getDescuentoById, getDescuentos, updateDescuento } from "../controllers/descuentoController.ts";
+import { createDescuento, deleteDescuento, getDescuentoById, getDescuentos, updateDescuento } from "../controllers/descuentoController";
 
 const descuentoRoute=Router();
 

@@ -8,32 +8,66 @@ datasource db {
 }
 
 model Categoria {
-  categoria_id       BigInt    @id @default(autoincrement())
-  nombre   String?   @db.VarChar(255)
-  activo   Boolean?
-  productos Producto[]
-}
-
-model Descuento {
-  descuento_id     BigInt   @id @default(autoincrement())
-  valor  String?  @db.VarChar(255)
-  activo Boolean?
+  categoria_id BigInt     @id @default(autoincrement())
+  nombre       String?    @db.VarChar(255)
+  activo       Boolean?
   productos    Producto[]
 }
 
+model Descuento {
+  descuento_id BigInt     @id @default(autoincrement())
+  valor        String?    @db.VarChar(255)
+  activo       Boolean?
+  productos    Producto[]
+}
+
+model DetallePedido {
+  detallePedido_id          BigInt  @id @default(autoincrement())
+  pedido_id   BigInt?
+  producto_id BigInt?
+  cantidad    Int
+  precio_unit Float
+
+  pedido   Pedido?   @relation(fields: [pedido_id], references: [pedido_id])
+  producto Producto? @relation(fields: [producto_id], references: [producto_id])
+}
+
+model Factura {
+  factura_id BigInt   @id @default(autoincrement())
+  pedido_id  BigInt?  @unique
+  fecha      DateTime @default(now())
+  total      Float?
+
+  activo Boolean? @default(true)
+  pedido Pedido?  @relation(fields: [pedido_id], references: [pedido_id])
+}
+
+model Pedido {
+  pedido_id  BigInt   @id @default(autoincrement())
+  fecha      DateTime @default(now())
+  total      Float?
+  usuario_id BigInt?
+  estado     String?  @db.VarChar(100)
+  activo     Boolean? @default(true)
+
+  usuario  Usuario?        @relation(fields: [usuario_id], references: [usuario_id])
+  detalles DetallePedido[]
+  factura  Factura?
+}
+
 model Producto {
-  producto_id               BigInt         @id @default(autoincrement())
-  nombre           String?        @db.VarChar(255)
-  descripcion      String?        @db.Text
-  precio           Float?
-  categoria_id     BigInt?
-  descuento_id     BigInt?
-  activo           Boolean?
-  categoria        Categoria?     @relation(fields: [categoria_id], references: [categoria_id])
-  descuento        Descuento?     @relation(fields: [descuento_id], references: [descuento_id])
-  imagenes         Imagen[]
-  productosAlergenos ProductoAlergeno[]
-  stockProductos   StockProducto[]
+  producto_id    BigInt          @id @default(autoincrement())
+  nombre         String?         @db.VarChar(255)
+  descripcion    String?         @db.Text
+  precio         Float?
+  categoria_id   BigInt?
+  descuento_id   BigInt?
+  activo         Boolean?
+  categoria      Categoria?      @relation(fields: [categoria_id], references: [categoria_id])
+  descuento      Descuento?      @relation(fields: [descuento_id], references: [descuento_id])
+  imagenes       Imagen[]
+  stockProductos StockProducto[]
+  detallesPedido DetallePedido[]
 }
 
 model Imagen {
@@ -45,32 +79,32 @@ model Imagen {
 }
 
 model Sucursal {
-  sucursal_id            BigInt   @id @default(autoincrement())
-  nombre        String?  @db.VarChar(255)
-  direccion_id  BigInt?
-  activo        Boolean?
-  direccion     Direccion? @relation(fields: [direccion_id], references: [direccion_id])
+  sucursal_id    BigInt          @id @default(autoincrement())
+  nombre         String?         @db.VarChar(255)
+  direccion_id   BigInt?
+  activo         Boolean?
+  direccion      Direccion?      @relation(fields: [direccion_id], references: [direccion_id])
   stockProductos StockProducto[]
 }
 
 model Provincia {
-  provincia_id       BigInt   @id @default(autoincrement())
-  nombre   String?  @db.VarChar(255)
-  activo   Boolean?
-  localidades Localidad[]
+  provincia_id BigInt      @id @default(autoincrement())
+  nombre       String?     @db.VarChar(255)
+  activo       Boolean?
+  localidades  Localidad[]
 }
 
 model Localidad {
-  localidad_id           BigInt   @id @default(autoincrement())
-  nombre       String?  @db.VarChar(255)
+  localidad_id BigInt      @id @default(autoincrement())
+  nombre       String?     @db.VarChar(255)
   provincia_id BigInt?
   activo       Boolean?
-  provincia    Provincia? @relation(fields: [provincia_id], references: [provincia_id])
+  provincia    Provincia?  @relation(fields: [provincia_id], references: [provincia_id])
   direcciones  Direccion[]
 }
 
 model Direccion {
-  direccion_id           BigInt     @id @default(autoincrement())
+  direccion_id BigInt     @id @default(autoincrement())
   calle        String?    @db.VarChar(255)
   numero       String?    @db.VarChar(255)
   localidad_id BigInt?
@@ -80,19 +114,20 @@ model Direccion {
 }
 
 model Usuario {
-  id         BigInt   @id @default(autoincrement())
+  usuario_id BigInt   @id @default(autoincrement())
   email      String?  @unique @db.VarChar(255)
   password   String?  @db.VarChar(255)
   rol        String?  @db.VarChar(255)
   activo     Boolean?
+  pedidos    Pedido[]
 }
 
 model StockProducto {
-  id           BigInt     @id @default(autoincrement())
-  producto_id  BigInt?
-  sucursal_id  BigInt?
-  stock        Int?
-  activo       Boolean?
-  producto     Producto?  @relation(fields: [producto_id], references: [producto_id])
-  sucursal     Sucursal?  @relation(fields: [sucursal_id], references: [sucursal_id])
+  id          BigInt    @id @default(autoincrement())
+  producto_id BigInt?
+  sucursal_id BigInt?
+  stock       Int?
+  activo      Boolean?
+  producto    Producto? @relation(fields: [producto_id], references: [producto_id])
+  sucursal    Sucursal? @relation(fields: [sucursal_id], references: [sucursal_id])
 }

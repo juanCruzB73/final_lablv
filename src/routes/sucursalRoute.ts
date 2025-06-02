@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createSucursal, deleteSucursal, getSucursalById, getSucursales, updateSucursal } from "../controllers/sucursalController.ts";
+import { createSucursal, deleteSucursal, getSucursalById, getSucursales, updateSucursal } from "../controllers/sucursalController";
 
 const sucursalRoute=Router();
 

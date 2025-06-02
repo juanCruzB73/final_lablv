@@ -1,6 +1,6 @@
 {
-  "calle": "Avenida Siempre Viva",
-  "numero": "742",
-  "localidad_id": 1,
-  "activo": true
+  "pedido_id": "1",
+  "producto_id": "5",
+  "cantidad": 2,
+  "precio_unit": 450.75
 }

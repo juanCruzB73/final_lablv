@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createDireccion, deleteDireccion, getDireccionById, getDirecciones, updateDireccion } from "../controllers/direccionController.ts";
+import { createDireccion, deleteDireccion, getDireccionById, getDirecciones, updateDireccion } from "../controllers/direccionController";
 
 const direccionRoute=Router();
 

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Localidad } from "../models/models.ts";
-import { serializeBigInts } from "../utils/serializeBigInts.ts";
+import { Localidad } from "../models/models";
+import { serializeBigInts } from "../utils/serializeBigInts";
 
 export const getLocalidades = async (_req: Request, res: Response): Promise<void> => {
   try {

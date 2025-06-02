@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createStockProducto, deleteStockProducto, getStockProductoById, getStockProductos, updateStockProducto } from "../controllers/stockController.ts";
+import { createStockProducto, deleteStockProducto, getStockProductoById, getStockProductos, updateStockProducto } from "../controllers/stockController";
 
 const stockRoute=Router();
 

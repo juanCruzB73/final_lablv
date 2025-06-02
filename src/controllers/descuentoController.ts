@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Descuento } from "../models/models.js";
+import { Descuento } from "../models/models";
 
 export const getDescuentos = async (_req: Request, res: Response): Promise<void> => {
   try {

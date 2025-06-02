@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createLocalidad, deleteLocalidad, getLocalidadById, getLocalidades, updateLocalidad } from "../controllers/localidadController.ts";
+import { createLocalidad, deleteLocalidad, getLocalidadById, getLocalidades, updateLocalidad } from "../controllers/localidadController";
 
 const localidadRoute=Router();
 

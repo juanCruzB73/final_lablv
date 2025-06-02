@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createProvincia, deleteProvincia, getProvinciaById, getProvincias, updateProvincia } from "../controllers/porvinciaController.ts";
+import { createProvincia, deleteProvincia, getProvinciaById, getProvincias, updateProvincia } from "../controllers/porvinciaController";
 
 const provinciaRoute=Router();
 
